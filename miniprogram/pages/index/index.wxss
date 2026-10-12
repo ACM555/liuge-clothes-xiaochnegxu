@@ -1,0 +1,163 @@
+.hero {
+  padding: 36rpx 32rpx 40rpx;
+  border-radius: 24rpx;
+  background: linear-gradient(140deg, #fdf6ec 0%, #f2dfd2 55%, #e9cbbb 100%);
+  box-shadow: inset 0 1rpx 0 rgba(255, 255, 255, 0.7);
+}
+
+.hero-eyebrow {
+  font-size: 22rpx;
+  letter-spacing: 4rpx;
+  color: #a06a4d;
+}
+
+.hero-title {
+  margin-top: 12rpx;
+  font-size: 48rpx;
+  font-weight: 700;
+  letter-spacing: 2rpx;
+}
+
+.hero-sub {
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: #7d6a5c;
+}
+
+.error-card {
+  margin-top: 24rpx;
+  padding: 32rpx;
+}
+
+.error-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  margin-bottom: 8rpx;
+}
+
+.retry {
+  margin-top: 24rpx;
+  width: 220rpx;
+}
+
+.preview-strip {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-top: 24rpx;
+  padding: 20rpx 24rpx;
+  border-radius: 20rpx;
+  background: #2f2a24;
+  color: #f6f2ec;
+}
+
+.preview-strip-label {
+  padding: 4rpx 14rpx;
+  border-radius: 999rpx;
+  background: #b4553a;
+  font-size: 22rpx;
+}
+
+.preview-strip-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.preview-strip-body .muted {
+  color: #cbc2b6;
+  font-size: 22rpx;
+}
+
+.preview-strip-name {
+  font-size: 28rpx;
+}
+
+.preview-strip-arrow {
+  font-size: 24rpx;
+  color: #f0c9b4;
+}
+
+.categories {
+  margin: 28rpx 0 8rpx;
+  white-space: nowrap;
+}
+
+.category {
+  display: inline-block;
+  margin-right: 16rpx;
+  padding: 12rpx 30rpx;
+  border-radius: 999rpx;
+  background: #fffdf9;
+  color: #6d655b;
+  font-size: 26rpx;
+  border: 1rpx solid #ece2d6;
+}
+
+.category-active {
+  background: #b4553a;
+  color: #fff8f3;
+  border-color: #b4553a;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 24rpx;
+}
+
+.product-card {
+  position: relative;
+  width: 48.5%;
+  margin-bottom: 24rpx;
+  overflow: hidden;
+}
+
+.product-image {
+  width: 100%;
+  height: 400rpx;
+  display: block;
+  background: #efe7dd;
+}
+
+.fav {
+  position: absolute;
+  top: 16rpx;
+  right: 16rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 999rpx;
+  background: rgba(255, 253, 249, 0.9);
+  color: #8a8378;
+  font-size: 20rpx;
+}
+
+.fav-on {
+  background: #b4553a;
+  color: #fff8f3;
+}
+
+.product-body {
+  padding: 20rpx 20rpx 24rpx;
+}
+
+.product-name {
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.product-sub {
+  margin-top: 4rpx;
+  font-size: 22rpx;
+}
+
+.product-foot {
+  margin-top: 16rpx;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.product-foot .price {
+  font-size: 32rpx;
+}

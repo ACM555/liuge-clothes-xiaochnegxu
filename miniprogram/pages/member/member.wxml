@@ -1,0 +1,66 @@
+<view class="page">
+  <view class="demo-banner">演示态余额 · 不可实际抵扣，服务重启即重置</view>
+
+  <view wx:if="{{error}}" class="empty">{{error}}</view>
+  <view wx:elif="{{loading}}" class="empty">正在加载会员信息…</view>
+
+  <block wx:else>
+    <view class="vip-card">
+      <view class="vip-head">
+        <view class="vip-brand">刘哥服装 · 电子会员卡</view>
+        <view class="vip-code">{{member.referralCode}}</view>
+      </view>
+      <view class="vip-name">{{member.name}}</view>
+      <view class="vip-phone">{{member.phone}}</view>
+      <view class="vip-foot">
+        <text>演示会员编号 {{member.id}}</text>
+        <text>累计消费 {{spentText}}</text>
+      </view>
+    </view>
+
+    <button class="btn-primary authorize" bindtap="authorize">微信一键授权开卡（演示）</button>
+
+    <view class="balance-row">
+      <view class="balance card">
+        <view class="balance-label">返券余额</view>
+        <view class="balance-num">{{couponText}}</view>
+        <view class="muted">消费 5% 返券规则，阶段 2 实现</view>
+      </view>
+      <view class="balance card">
+        <view class="balance-label">佣金余额</view>
+        <view class="balance-num">{{commissionText}}</view>
+        <view class="muted">推荐成交 8% 佣金，阶段 3 实现</view>
+      </view>
+    </view>
+
+    <view class="card ledger">
+      <view class="section-title inner">演示账本说明</view>
+      <view wx:for="{{member.ledger}}" wx:key="type" class="ledger-row">
+        <text>{{item.type}}</text>
+        <text class="price">{{item.note}}</text>
+      </view>
+      <view class="muted">
+        两个余额账户相互独立，正式阶段同一订单可叠加抵扣。
+      </view>
+    </view>
+
+    <view class="card menu">
+      <view class="menu-row" bindtap="goOrders">
+        <text>我的订单</text>
+        <text class="muted">{{orderCount}} 笔 ›</text>
+      </view>
+      <view class="menu-row">
+        <text>我的收藏</text>
+        <text class="muted">{{favoriteCount}} 件 ›</text>
+      </view>
+      <view class="menu-row" bindtap="invite">
+        <text>推荐好友 · 赚 8% 佣金</text>
+        <text class="muted">查看分享入口 ›</text>
+      </view>
+      <view class="menu-row" bindtap="invite">
+        <text>返券 / 佣金明细</text>
+        <text class="muted">阶段 2、3 开放 ›</text>
+      </view>
+    </view>
+  </block>
+</view>

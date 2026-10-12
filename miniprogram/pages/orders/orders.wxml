@@ -1,0 +1,73 @@
+<view class="page">
+  <view class="demo-banner">演示订单 · 状态由商家后台手动流转，金额为模拟金额</view>
+
+  <view class="stat-row">
+    <view class="stat card">
+      <view class="stat-num">{{counts.total}}</view>
+      <view class="muted">全部订单</view>
+    </view>
+    <view class="stat card">
+      <view class="stat-num">{{counts.active}}</view>
+      <view class="muted">进行中</view>
+    </view>
+    <view class="stat card">
+      <view class="stat-num">{{counts.done}}</view>
+      <view class="muted">已完成</view>
+    </view>
+    <view class="stat card">
+      <view class="stat-num">{{counts.refunded}}</view>
+      <view class="muted">已退款</view>
+    </view>
+  </view>
+
+  <view class="tabs">
+    <view
+      wx:for="{{tabs}}"
+      wx:key="*this"
+      class="tab {{filter === item ? 'tab-on' : ''}}"
+      data-filter="{{item}}"
+      bindtap="setFilter"
+    >{{item}}</view>
+  </view>
+
+  <view wx:if="{{error}}" class="empty">{{error}}</view>
+  <view wx:elif="{{loading}}" class="empty">正在加载订单…</view>
+  <view wx:elif="{{!orders.length}}" class="empty">
+    <view>还没有订单</view>
+    <button class="btn-ghost go-shop" bindtap="goShopping">去看款</button>
+  </view>
+
+  <block wx:else>
+    <block wx:for="{{orders}}" wx:key="id">
+      <view
+        wx:if="{{filter === '全部'
+          || (filter === '进行中' && !item.done && !item.refunded)
+          || (filter === '已完成' && item.done)
+          || (filter === '已退款' && item.refunded)}}"
+        class="order card"
+      >
+        <view class="order-head">
+          <text class="muted">{{item.id}}</text>
+          <text class="status {{item.refunded ? 'status-refund' : ''}}">{{item.statusText}}</text>
+        </view>
+        <view class="order-body">
+          <image class="order-image" src="{{item.image}}" mode="aspectFill" />
+          <view class="order-info">
+            <view class="order-name">{{item.productName}}</view>
+            <view class="muted">{{item.color}} / {{item.size}} · × {{item.quantity}}</view>
+            <view class="muted">{{item.fulfillmentText}}</view>
+            <view class="muted">{{item.timeText}}</view>
+          </view>
+          <view class="order-amount">
+            <view class="price">{{item.totalText}}</view>
+            <view class="muted">单价 {{item.unitText}}</view>
+          </view>
+        </view>
+        <view class="order-foot">
+          <text class="muted">联系人：{{item.contact}}</text>
+          <text wx:if="{{item.address}}" class="muted">地址：{{item.address}}</text>
+        </view>
+      </view>
+    </block>
+  </block>
+</view>

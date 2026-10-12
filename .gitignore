@@ -16,6 +16,9 @@ coverage/
 .DS_Store
 Thumbs.db
 
+# WeChat DevTools local state
+project.private.config.json
+
 # Local customer exports and temporary artifacts
 data/
 exports/

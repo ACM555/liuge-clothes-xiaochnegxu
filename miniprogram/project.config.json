@@ -1,0 +1,15 @@
+{
+  "description": "刘哥服装小程序 · 顾客端（第一阶段演示）",
+  "appid": "touristappid",
+  "projectname": "liuge-clothes-miniprogram",
+  "miniprogramRoot": "./",
+  "compileType": "miniprogram",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": false,
+    "postcss": true,
+    "minified": false
+  },
+  "libVersion": "3.5.0"
+}

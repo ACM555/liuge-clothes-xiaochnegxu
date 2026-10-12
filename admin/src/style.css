@@ -1,0 +1,31 @@
+:root {
+  --ink: #241f1a;
+  --paper: #f6f2ec;
+  --card: #fffdf9;
+  --line: #e7ded2;
+  --accent: #b4553a;
+  --accent-soft: #fdf1ea;
+  --muted: #8a8378;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+input,
+select {
+  font: inherit;
+}

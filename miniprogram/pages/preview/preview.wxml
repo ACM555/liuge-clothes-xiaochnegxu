@@ -1,0 +1,50 @@
+<view class="page">
+  <view class="demo-banner">新款预告为「预定意向」登记，不锁库存、不进入支付流程</view>
+
+  <view class="intro">
+    <view class="intro-title">下一批即将到店</view>
+    <view class="muted">留下联系方式和期望规格，到货后门店会优先通知你</view>
+  </view>
+
+  <view wx:if="{{error}}" class="empty">{{error}}</view>
+  <view wx:elif="{{loading}}" class="empty">正在加载新款预告…</view>
+  <view wx:elif="{{!previews.length}}" class="empty">商家尚未发布新款预告</view>
+
+  <block wx:else>
+    <view
+      wx:for="{{previews}}"
+      wx:key="id"
+      class="preview-card card {{form.productId === item.id ? 'preview-on' : ''}}"
+      data-id="{{item.id}}"
+      bindtap="choose"
+    >
+      <image class="preview-image" src="{{item.image}}" mode="aspectFill" />
+      <view class="preview-body">
+        <view class="preview-name">{{item.name}}<text class="tag-preview">未到货</text></view>
+        <view class="muted">{{item.subtitle || item.category}}</view>
+        <view class="preview-foot">
+          <text class="price">{{money(item.price)}}</text>
+          <text class="muted">预计售价</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="card form">
+      <view class="field-title">登记预定意向</view>
+      <input class="input" placeholder="联系方式（手机号 / 微信）" value="{{form.contact}}" bindinput="onContact" />
+      <input class="input" placeholder="期望颜色 / 尺码，例如 卡其 / M" value="{{form.skuHint}}" bindinput="onHint" />
+      <button class="btn-primary submit" bindtap="submit">提交预定意向</button>
+    </view>
+
+    <view class="section-title">我的预定意向 <text class="hint">{{notes.length}} 条</text></view>
+    <view wx:if="{{!notes.length}}" class="empty">还没有登记记录</view>
+    <view wx:for="{{notes}}" wx:key="id" class="note card">
+      <view class="note-head">
+        <text>{{item.productName}}</text>
+        <text class="muted">{{item.skuHint || '未指定规格'}}</text>
+      </view>
+      <view class="muted">联系人：{{item.contact}}</view>
+      <view class="muted">{{item.id}} · 等待到货通知</view>
+    </view>
+  </block>
+</view>

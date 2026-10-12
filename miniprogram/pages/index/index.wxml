@@ -1,0 +1,67 @@
+<view class="page">
+  <view class="demo-banner">演示数据 · 模拟交易，未接入微信支付与真实库存</view>
+
+  <view class="hero">
+    <view class="hero-eyebrow">2026 秋冬 · 线上看款</view>
+    <view class="hero-title">选一件合身的好衣服</view>
+    <view class="hero-sub">门店同款 · 配送到家 / 到店自提</view>
+  </view>
+
+  <view wx:if="{{error}}" class="card error-card">
+    <view class="error-title">暂时连不上模拟 API</view>
+    <view class="muted">{{error}}</view>
+    <button class="btn-ghost retry" bindtap="loadAll">重新加载</button>
+  </view>
+
+  <block wx:else>
+    <view wx:if="{{previews.length}}" class="preview-strip" bindtap="goPreview">
+      <view class="preview-strip-label">新款预告</view>
+      <view class="preview-strip-body">
+        <text class="preview-strip-name">{{previews[0].name}}</text>
+        <text class="muted">未到货 · 可先登记预定意向</text>
+      </view>
+      <view class="preview-strip-arrow">去看</view>
+    </view>
+
+    <scroll-view class="categories" scroll-x enable-flex>
+      <view
+        wx:for="{{categories}}"
+        wx:key="*this"
+        class="category {{activeCategory === item ? 'category-active' : ''}}"
+        data-category="{{item}}"
+        bindtap="selectCategory"
+      >{{item}}</view>
+    </scroll-view>
+
+    <view wx:if="{{loading}}" class="empty">正在加载款式…</view>
+
+    <view wx:else class="grid">
+      <view
+        wx:for="{{list}}"
+        wx:key="id"
+        class="product-card card"
+        data-id="{{item.id}}"
+        bindtap="goDetail"
+      >
+        <image class="product-image" src="{{item.image}}" mode="aspectFill" />
+        <view
+          class="fav {{item.fav ? 'fav-on' : ''}}"
+          catchtap="onToggleFavorite"
+          data-id="{{item.id}}"
+        >{{item.fav ? '已收藏' : '收藏'}}</view>
+        <view class="product-body">
+          <view class="product-name">{{item.name}}</view>
+          <view class="muted product-sub">{{item.subtitle || item.category}}</view>
+          <view class="product-foot">
+            <text class="price">{{money(item.price)}}</text>
+            <text class="muted">{{item.skus.length}} 个规格</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{!loading && !list.length}}" class="empty">
+      暂无在售款式，请在商家后台上架商品
+    </view>
+  </block>
+</view>

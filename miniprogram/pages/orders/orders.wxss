@@ -1,0 +1,107 @@
+.stat-row {
+  display: flex;
+  gap: 12rpx;
+}
+
+.stat {
+  flex: 1;
+  padding: 20rpx 0;
+  text-align: center;
+}
+
+.stat-num {
+  font-size: 38rpx;
+  font-weight: 700;
+  color: #b4553a;
+}
+
+.tabs {
+  display: flex;
+  gap: 12rpx;
+  margin: 24rpx 0 8rpx;
+}
+
+.tab {
+  flex: 1;
+  padding: 14rpx 0;
+  text-align: center;
+  border-radius: 999rpx;
+  background: #fffdf9;
+  color: #6d655b;
+  font-size: 24rpx;
+  border: 1rpx solid #ece2d6;
+}
+
+.tab-on {
+  background: #b4553a;
+  color: #fff8f3;
+  border-color: #b4553a;
+}
+
+.go-shop {
+  margin-top: 24rpx;
+  width: 240rpx;
+}
+
+.order {
+  margin-top: 20rpx;
+  padding: 24rpx;
+}
+
+.order-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status {
+  font-size: 24rpx;
+  color: #b4553a;
+  font-weight: 600;
+}
+
+.status-refund {
+  color: #8a8378;
+}
+
+.order-body {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 20rpx;
+}
+
+.order-image {
+  width: 160rpx;
+  height: 200rpx;
+  border-radius: 12rpx;
+  background: #efe7dd;
+}
+
+.order-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.order-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  margin-bottom: 6rpx;
+}
+
+.order-amount {
+  text-align: right;
+}
+
+.order-amount .price {
+  font-size: 30rpx;
+}
+
+.order-foot {
+  margin-top: 16rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #f0e7dc;
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}

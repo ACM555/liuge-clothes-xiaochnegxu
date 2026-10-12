@@ -1,0 +1,31 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/product/product",
+    "pages/preview/preview",
+    "pages/orders/orders",
+    "pages/member/member"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#f6f2ec",
+    "navigationBarTitleText": "刘哥服装",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f6f2ec"
+  },
+  "tabBar": {
+    "color": "#8a8378",
+    "selectedColor": "#b4553a",
+    "backgroundColor": "#fffdf9",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/index/index", "text": "看款" },
+      { "pagePath": "pages/preview/preview", "text": "新款预告" },
+      { "pagePath": "pages/orders/orders", "text": "订单" },
+      { "pagePath": "pages/member/member", "text": "我的" }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

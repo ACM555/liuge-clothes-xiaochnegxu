@@ -55,6 +55,8 @@ function createStore() {
   const products = structuredClone(seedProducts);
   const orders = [];
   const favorites = new Set();
+  const previewNotes = [];
+  let nextNote = 1;
   const member = {
     id: "demo-member",
     name: "演示会员",
@@ -158,6 +160,25 @@ function createStore() {
     return order;
   }
 
+  // 新款预告仅登记意向，不锁库存、不产生订单与金额。
+  function registerPreviewNote(input) {
+    const product = getProduct(String(input.productId || ""));
+    if (!product.preview) throw error("该商品不是新款预告");
+    const contact = String(input.contact || "").trim();
+    if (!contact) throw error("请填写联系方式");
+    const note = {
+      id: `NOTE${nextNote++}`,
+      productId: product.id,
+      productName: product.name,
+      contact,
+      skuHint: String(input.skuHint || "").trim(),
+      createdAt: new Date().toISOString(),
+      simulated: true
+    };
+    previewNotes.unshift(note);
+    return note;
+  }
+
   function setOrderStatus(id, status) {
     const order = orders.find((item) => item.id === id);
     if (!order) throw error("订单不存在", 404);
@@ -184,6 +205,8 @@ function createStore() {
     saveProduct,
     createOrder,
     setOrderStatus,
+    registerPreviewNote,
+    listPreviewNotes: () => previewNotes,
     listOrders: () => orders,
     getMember: () => ({
       ...member,

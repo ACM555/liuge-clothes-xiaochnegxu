@@ -1,0 +1,109 @@
+.vip-card {
+  padding: 36rpx;
+  border-radius: 24rpx;
+  background: linear-gradient(135deg, #3a2f26 0%, #6b4a35 60%, #a2643f 100%);
+  color: #fdf6ec;
+  box-shadow: 0 12rpx 28rpx rgba(58, 47, 38, 0.24);
+}
+
+.vip-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 22rpx;
+  color: #e6d6c6;
+  letter-spacing: 2rpx;
+}
+
+.vip-name {
+  margin-top: 40rpx;
+  font-size: 44rpx;
+  font-weight: 700;
+}
+
+.vip-phone {
+  margin-top: 6rpx;
+  font-size: 26rpx;
+  color: #eddfd1;
+}
+
+.vip-foot {
+  margin-top: 40rpx;
+  display: flex;
+  justify-content: space-between;
+  font-size: 22rpx;
+  color: #e0cebd;
+}
+
+.authorize {
+  margin-top: 24rpx;
+}
+
+.balance-row {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 24rpx;
+}
+
+.balance {
+  flex: 1;
+  padding: 24rpx;
+}
+
+.balance-label {
+  font-size: 24rpx;
+  color: #6d655b;
+}
+
+.balance-num {
+  margin: 8rpx 0;
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #b4553a;
+}
+
+.ledger {
+  margin-top: 24rpx;
+  padding: 28rpx;
+}
+
+.section-title.inner {
+  margin: 0 0 16rpx;
+  font-size: 30rpx;
+}
+
+.ledger-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12rpx 0;
+  border-bottom: 1rpx solid #f2e9de;
+  font-size: 26rpx;
+}
+
+.ledger-row .price {
+  font-size: 22rpx;
+  font-weight: 400;
+  color: #9a5b1f;
+}
+
+.ledger .muted {
+  display: block;
+  margin-top: 16rpx;
+}
+
+.menu {
+  margin-top: 24rpx;
+  padding: 8rpx 28rpx;
+}
+
+.menu-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28rpx 0;
+  border-bottom: 1rpx solid #f2e9de;
+  font-size: 28rpx;
+}
+
+.menu-row:last-child {
+  border-bottom: none;
+}

@@ -1,0 +1,69 @@
+<view class="page">
+  <view class="demo-banner">演示数据 · 模拟下单，不接微信支付</view>
+
+  <view wx:if="{{error}}" class="empty">{{error}}</view>
+  <view wx:elif="{{loading}}" class="empty">正在加载款式…</view>
+
+  <block wx:else>
+    <image class="cover" src="{{product.image}}" mode="aspectFill" />
+
+    <view class="card detail">
+      <view class="name">{{product.name}}<text wx:if="{{product.preview}}" class="tag-preview">未到货</text></view>
+      <view class="muted">{{product.subtitle || product.category}}</view>
+      <view class="price big">{{money(product.price)}}</view>
+
+      <view class="field-title">颜色 / 尺码</view>
+      <view class="skus">
+        <view
+          wx:for="{{product.skus}}"
+          wx:key="id"
+          class="sku {{skuId === item.id ? 'sku-on' : ''}} {{item.stock < 1 ? 'sku-out' : ''}}"
+          data-id="{{item.id}}"
+          bindtap="selectSku"
+        >
+          <text>{{item.color}} · {{item.size}}</text>
+          <text class="sku-stock">{{item.stock > 0 ? '库存 ' + item.stock : '缺货'}}</text>
+        </view>
+      </view>
+
+      <view class="field-title">数量</view>
+      <view class="stepper">
+        <view class="step-btn" data-delta="-1" bindtap="step">−</view>
+        <view class="step-value">{{quantity}}</view>
+        <view class="step-btn" data-delta="1" bindtap="step">+</view>
+      </view>
+
+      <view class="field-title">取货方式</view>
+      <view class="modes">
+        <view
+          class="mode {{fulfillment === 'delivery' ? 'mode-on' : ''}}"
+          data-mode="delivery"
+          bindtap="selectFulfillment"
+        >门店配送到家</view>
+        <view
+          class="mode {{fulfillment === 'pickup' ? 'mode-on' : ''}}"
+          data-mode="pickup"
+          bindtap="selectFulfillment"
+        >到店自提</view>
+      </view>
+
+      <view class="field-title">联系人</view>
+      <input class="input" placeholder="请输入称呼与电话" value="{{contact}}" bindinput="onContact" />
+
+      <block wx:if="{{fulfillment === 'delivery'}}">
+        <view class="field-title">配送地址</view>
+        <input class="input" placeholder="请输入收货地址" value="{{address}}" bindinput="onAddress" />
+      </block>
+    </view>
+
+    <view class="bar card">
+      <view class="bar-total">
+        <text class="muted">合计（模拟）</text>
+        <text class="price">{{totalText}}</text>
+      </view>
+      <button class="btn-primary bar-btn" disabled="{{submitting}}" bindtap="submit">
+        {{submitting ? '提交中…' : '立即下单（模拟）'}}
+      </button>
+    </view>
+  </block>
+</view>

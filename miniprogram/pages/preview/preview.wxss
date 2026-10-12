@@ -1,0 +1,91 @@
+.intro {
+  padding: 32rpx;
+  border-radius: 24rpx;
+  background: linear-gradient(135deg, #2f2a24 0%, #4a3d31 100%);
+  color: #f6f2ec;
+}
+
+.intro-title {
+  font-size: 40rpx;
+  font-weight: 700;
+}
+
+.intro .muted {
+  color: #cbc2b6;
+  margin-top: 8rpx;
+}
+
+.preview-card {
+  display: flex;
+  margin-top: 24rpx;
+  overflow: hidden;
+  border: 2rpx solid transparent;
+}
+
+.preview-on {
+  border-color: #b4553a;
+}
+
+.preview-image {
+  width: 240rpx;
+  height: 300rpx;
+  background: #efe7dd;
+}
+
+.preview-body {
+  flex: 1;
+  padding: 24rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.preview-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.preview-foot {
+  margin-top: auto;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.form {
+  margin-top: 24rpx;
+  padding: 28rpx;
+}
+
+.field-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  margin-bottom: 16rpx;
+}
+
+.input {
+  margin-bottom: 16rpx;
+  padding: 22rpx 24rpx;
+  border-radius: 16rpx;
+  background: #fbf6f0;
+  border: 1rpx solid #e6dbcd;
+  font-size: 26rpx;
+}
+
+.submit {
+  margin-top: 8rpx;
+}
+
+.note {
+  margin-bottom: 16rpx;
+  padding: 24rpx;
+}
+
+.note-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 28rpx;
+  font-weight: 600;
+  margin-bottom: 6rpx;
+}

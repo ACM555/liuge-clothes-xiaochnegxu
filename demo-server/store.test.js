@@ -59,3 +59,19 @@ test("admin changes product are visible through the same catalog", () => {
   assert.equal(store.listProducts(false).some((item) => item.id === "linen-jacket"), false);
   assert.equal(store.listProducts(true).find((item) => item.id === "linen-jacket").name, "新标题");
 });
+
+test("preview product only accepts intent notes, never orders", () => {
+  const store = createStore();
+  assert.throws(() => store.registerPreviewNote({
+    productId: "linen-jacket", contact: "测试顾客"
+  }), /不是新款预告/);
+  assert.throws(() => store.registerPreviewNote({
+    productId: "trench", contact: ""
+  }), /联系方式/);
+  const note = store.registerPreviewNote({
+    productId: "trench", contact: "测试顾客", skuHint: "卡其 / M"
+  });
+  assert.equal(note.productId, "trench");
+  assert.equal(store.listPreviewNotes().length, 1);
+  assert.equal(store.getProduct("trench").skus[0].stock, 0);
+});
