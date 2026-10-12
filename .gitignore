@@ -1,0 +1,22 @@
+# Credentials and local settings
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+private.key
+project.private.config.json
+
+# Dependencies and generated output
+node_modules/
+dist/
+build/
+coverage/
+*.log
+.DS_Store
+Thumbs.db
+
+# Local customer exports and temporary artifacts
+data/
+exports/
+tmp/
