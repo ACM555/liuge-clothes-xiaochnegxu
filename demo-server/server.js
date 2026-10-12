@@ -2,10 +2,17 @@
 // 明确不使用任何真实支付、真实顾客信息或真实余额结算。
 const http = require("node:http");
 const { createStore } = require("./store");
+const { createAuth } = require("./auth");
 
 const HOST = "127.0.0.1";
 const PORT = Number(process.env.PORT || 3000);
 const store = createStore();
+const auth = createAuth({
+  bindingCode: process.env.DEMO_BINDING_CODE,
+  username: process.env.DEMO_MERCHANT_USER,
+  password: process.env.DEMO_MERCHANT_PASS,
+  name: process.env.DEMO_MERCHANT_NAME
+});
 
 const PLACEHOLDER_SVG = (label, hue) => `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="800" viewBox="0 0 600 800">
   <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
@@ -85,30 +92,51 @@ function stats() {
   };
 }
 
+// role: "public" = 顾客端可访问；"merchant" = 仅商家，服务端强制校验令牌。
 const routes = [
-  ["GET", /^\/api\/health$/, () => ({ ok: true, simulated: true, mode: "demo" })],
-  ["GET", /^\/api\/products$/, (req) =>
+  ["GET", /^\/api\/health$/, "public", () => ({ ok: true, simulated: true, mode: "demo" })],
+  ["GET", /^\/api\/products$/, "public", (req) =>
     store.listProducts(new URL(req.url, "http://x").searchParams.get("includeInactive") === "1")],
-  ["GET", /^\/api\/products\/([^/]+)$/, (req, m) => store.getProduct(decodeURIComponent(m[1]))],
-  ["POST", /^\/api\/products$/, (req, m, body) => ({ product: store.saveProduct(body) })],
-  ["PUT", /^\/api\/products\/([^/]+)$/, (req, m, body) =>
+  ["GET", /^\/api\/products\/([^/]+)$/, "public", (req, m) => store.getProduct(decodeURIComponent(m[1]))],
+  ["POST", /^\/api\/products$/, "merchant", (req, m, body) => ({ product: store.saveProduct(body) })],
+  ["PUT", /^\/api\/products\/([^/]+)$/, "merchant", (req, m, body) =>
     ({ product: store.saveProduct(body, decodeURIComponent(m[1])) })],
-  ["GET", /^\/api\/orders$/, () => store.listOrders()],
-  ["POST", /^\/api\/orders$/, (req, m, body) => ({ order: store.createOrder(body) })],
-  ["POST", /^\/api\/orders\/([^/]+)\/status$/, (req, m, body) =>
+  ["GET", /^\/api\/orders$/, "public", () => store.listOrders()],
+  ["POST", /^\/api\/orders$/, "public", (req, m, body) => ({ order: store.createOrder(body) })],
+  ["POST", /^\/api\/orders\/([^/]+)\/status$/, "merchant", (req, m, body) =>
     ({ order: store.setOrderStatus(decodeURIComponent(m[1]), String(body.status || "")) })],
-  ["GET", /^\/api\/member$/, () => store.getMember()],
-  ["POST", /^\/api\/favorites\/toggle$/, (req, m, body) => ({ favorites: store.toggleFavorite(String(body.productId || "")) })],
-  ["GET", /^\/api\/preview-notes$/, () => store.listPreviewNotes()],
-  ["POST", /^\/api\/preview-notes$/, (req, m, body) => ({ note: store.registerPreviewNote(body) })],
-  ["GET", /^\/api\/stats$/, () => stats()]
+  ["GET", /^\/api\/member$/, "public", () => store.getMember()],
+  ["POST", /^\/api\/favorites\/toggle$/, "public", (req, m, body) => ({ favorites: store.toggleFavorite(String(body.productId || "")) })],
+  ["GET", /^\/api\/preview-notes$/, "public", () => store.listPreviewNotes()],
+  ["POST", /^\/api\/preview-notes$/, "public", (req, m, body) => ({ note: store.registerPreviewNote(body) })],
+  ["GET", /^\/api\/stats$/, "merchant", () => stats()],
+  ["POST", /^\/api\/auth\/binding-code$/, "public", (req, m, body) =>
+    auth.loginWithBindingCode(String(body.code || ""), clientKey(req), String(body.label || "微信入口"))],
+  ["POST", /^\/api\/auth\/password$/, "public", (req, m, body) =>
+    auth.loginWithPassword(String(body.username || ""), String(body.password || ""), clientKey(req), "账号密码入口")],
+  ["GET", /^\/api\/auth\/me$/, "public", (req) => ({ merchant: tokenMerchant(req) })],
+  ["POST", /^\/api\/auth\/logout$/, "public", (req) => auth.logout(bearer(req))],
+  ["GET", /^\/api\/auth\/audit$/, "merchant", () => auth.auditLog()]
 ];
+
+function bearer(req) {
+  const header = String(req.headers.authorization || "");
+  return header.startsWith("Bearer ") ? header.slice(7) : "";
+}
+
+function tokenMerchant(req) {
+  return auth.verify(bearer(req));
+}
+
+function clientKey(req) {
+  return req.socket.remoteAddress || "unknown";
+}
 
 const server = http.createServer(async (req, res) => {
   const cors = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET,POST,PUT,OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type"
+    "Access-Control-Allow-Headers": "Content-Type,Authorization"
   };
   if (req.method === "OPTIONS") {
     res.writeHead(204, cors);
@@ -132,11 +160,15 @@ const server = http.createServer(async (req, res) => {
   }
 
   let pathMatched = false;
-  for (const [method, pattern, handler] of routes) {
+  for (const [method, pattern, role, handler] of routes) {
     const match = path.match(pattern);
     if (!match) continue;
     pathMatched = true;
     if (req.method !== method) continue;
+    if (role === "merchant" && !tokenMerchant(req)) {
+      send(res, 401, { error: "需要商家登录后再操作" }, cors);
+      return;
+    }
     try {
       const body = method === "POST" || method === "PUT" ? await readJson(req) : {};
       send(res, 200, handler(req, match, body), cors);
@@ -158,6 +190,13 @@ if (require.main === module) {
   server.listen(PORT, HOST, () => {
     console.log(`[demo] 模拟 API 已启动：http://${HOST}:${PORT}（内存假数据，重启重置）`);
     console.log("[demo] 仅供本地联调，不接真实支付与真实顾客信息");
+    const hint = auth.bindingCodeHint();
+    if (!process.env.DEMO_BINDING_CODE) {
+      console.log(`[demo] 本次商家绑定码（仅本次运行有效）：${hint.bindingCode}`);
+    }
+    if (!process.env.DEMO_MERCHANT_PASS) {
+      console.log(`[demo] 本次商家账号：${process.env.DEMO_MERCHANT_USER || "admin"} / 密码：${hint.password}`);
+    }
   });
 }
 

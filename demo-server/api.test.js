@@ -1,5 +1,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
+
+process.env.DEMO_BINDING_CODE = "API-TEST-CODE";
 const { server } = require("./server");
 
 let base;
@@ -11,10 +13,13 @@ test.before(async () => {
 
 test.after(() => new Promise((resolve) => server.close(resolve)));
 
-async function call(method, path, body) {
+async function call(method, path, body, token) {
+  const headers = {};
+  if (body) headers["Content-Type"] = "application/json";
+  if (token) headers.Authorization = `Bearer ${token}`;
   const res = await fetch(`${base}${path}`, {
     method,
-    headers: body ? { "Content-Type": "application/json" } : undefined,
+    headers,
     body: body ? JSON.stringify(body) : undefined
   });
   const data = await res.json();
@@ -57,6 +62,8 @@ test("preview product is rejected for normal ordering", async () => {
 });
 
 test("order status follows legal transitions and refund restores stock", async () => {
+  const login = await call("POST", "/api/auth/binding-code", { code: "API-TEST-CODE" });
+  const token = login.data.token;
   const before = (await call("GET", "/api/products/cotton-dress")).data.skus[0].stock;
   const created = await call("POST", "/api/orders", {
     productId: "cotton-dress",
@@ -69,13 +76,13 @@ test("order status follows legal transitions and refund restores stock", async (
   const id = created.data.order.id;
   assert.equal((await call("GET", "/api/products/cotton-dress")).data.skus[0].stock, before - 1);
 
-  const illegal = await call("POST", `/api/orders/${id}/status`, { status: "picked_up" });
+  const illegal = await call("POST", `/api/orders/${id}/status`, { status: "picked_up" }, token);
   assert.equal(illegal.status, 400);
 
-  const delivered = await call("POST", `/api/orders/${id}/status`, { status: "delivered" });
+  const delivered = await call("POST", `/api/orders/${id}/status`, { status: "delivered" }, token);
   assert.equal(delivered.data.order.status, "delivered");
 
-  const refunded = await call("POST", `/api/orders/${id}/status`, { status: "refunded" });
+  const refunded = await call("POST", `/api/orders/${id}/status`, { status: "refunded" }, token);
   assert.equal(refunded.data.order.status, "refunded");
   assert.equal((await call("GET", "/api/products/cotton-dress")).data.skus[0].stock, before);
 });
@@ -92,7 +99,9 @@ test("preview notes register intent without touching stock", async () => {
 });
 
 test("statistics are labelled simulated and reconcile with orders", async () => {
-  const stats = (await call("GET", "/api/stats")).data;
+  const login = await call("POST", "/api/auth/binding-code", { code: "API-TEST-CODE" });
+  const token = login.data.token;
+  const stats = (await call("GET", "/api/stats", undefined, token)).data;
   const orders = (await call("GET", "/api/orders")).data;
   assert.equal(stats.simulated, true);
   assert.equal(stats.orders.total, orders.length);

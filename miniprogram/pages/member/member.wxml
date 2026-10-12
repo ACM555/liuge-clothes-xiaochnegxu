@@ -62,5 +62,11 @@
         <text class="muted">阶段 2、3 开放 ›</text>
       </view>
     </view>
+
+    <!-- 商家入口：不显眼放在底部，真正的权限由服务端校验 -->
+    <view class="merchant-entry" bindtap="goMerchant">
+      <text>商家管理入口</text>
+      <text class="muted">仅店主使用 ›</text>
+    </view>
   </block>
 </view>

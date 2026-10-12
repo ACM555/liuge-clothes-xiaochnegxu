@@ -58,5 +58,12 @@ Page({
 
   goOrders() {
     wx.switchTab({ url: "/pages/orders/orders" });
+  },
+
+  goMerchant() {
+    const target = api.getToken()
+      ? "/pages/merchant-admin/merchant-admin"
+      : "/pages/merchant-login/merchant-login";
+    wx.navigateTo({ url: target });
   }
 });

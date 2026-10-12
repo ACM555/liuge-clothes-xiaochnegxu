@@ -4,7 +4,9 @@
     "pages/product/product",
     "pages/preview/preview",
     "pages/orders/orders",
-    "pages/member/member"
+    "pages/member/member",
+    "pages/merchant-login/merchant-login",
+    "pages/merchant-admin/merchant-admin"
   ],
   "window": {
     "backgroundTextStyle": "dark",

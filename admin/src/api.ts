@@ -1,18 +1,57 @@
 import type { Member, Order, PreviewNote, Product, Stats } from "./types";
 
+export interface Merchant {
+  id: string;
+  name: string;
+  role: string;
+  username: string;
+  openidBound: boolean;
+}
+
+let token = sessionStorage.getItem("merchantToken") || "";
+
+export function getToken(): string {
+  return token;
+}
+
+export function setToken(value: string): void {
+  token = value;
+  if (value) sessionStorage.setItem("merchantToken", value);
+  else sessionStorage.removeItem("merchantToken");
+}
+
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const headers: Record<string, string> = {};
+  if (options.body) headers["Content-Type"] = "application/json";
+  if (token) headers.Authorization = `Bearer ${token}`;
   const res = await fetch(path, {
-    headers: options.body ? { "Content-Type": "application/json" } : undefined,
+    headers,
     ...options
   });
   const data = await res.json().catch(() => null);
   if (!res.ok) {
+    if (res.status === 401) setToken("");
     throw new Error((data && (data as { error?: string }).error) || `请求失败（${res.status}）`);
   }
   return data as T;
 }
 
 export const api = {
+  // 认证
+  loginWithBindingCode: (code: string) =>
+    request<{ token: string; merchant: Merchant }>("/api/auth/binding-code", {
+      method: "POST",
+      body: JSON.stringify({ code, label: "Web 后台绑定码入口" })
+    }),
+  loginWithPassword: (username: string, password: string) =>
+    request<{ token: string; merchant: Merchant }>("/api/auth/password", {
+      method: "POST",
+      body: JSON.stringify({ username, password })
+    }),
+  me: () => request<{ merchant: Merchant | null }>("/api/auth/me"),
+  logout: () => request<{ ok: boolean }>("/api/auth/logout", { method: "POST", body: JSON.stringify({}) }),
+  audit: () => request<{ at: string; action: string; detail: string }[]>("/api/auth/audit"),
+
   health: () => request<{ ok: boolean; simulated: boolean }>("/api/health"),
   products: (includeInactive = false) =>
     request<Product[]>(`/api/products${includeInactive ? "?includeInactive=1" : ""}`),

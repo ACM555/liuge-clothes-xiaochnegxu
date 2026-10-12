@@ -28,6 +28,8 @@
 node demo-server/server.js
 ```
 
+启动时控制台会打印**本次商家绑定码**与**账号密码**（不写死在仓库，每次运行随机；可用环境变量 `DEMO_BINDING_CODE` / `DEMO_MERCHANT_USER` / `DEMO_MERCHANT_PASS` 固定）。
+
 启动商家后台（开发模式，默认 `http://127.0.0.1:5173`）：
 
 ```bash
@@ -36,13 +38,17 @@ npm install
 npm run dev
 ```
 
+后台和「我的」页里的**商家管理入口**都需要先登录：用绑定码（推荐，等同绑定店主微信）或账号密码。顾客看款下单不需要登录。
+
 联调小程序：用微信开发者工具导入 `miniprogram/` 目录，在「详情 → 本地设置」勾选**不校验合法域名**，因为本地 API 为 `http://127.0.0.1:3000`。
 
 ## 测试
 
 ```bash
 node --test demo-server/store.test.js   # 业务规则单元测试
+node --test demo-server/auth.test.js    # 鉴权（绑定码 / 密码 / 限流 / 审计）
 node --test demo-server/api.test.js     # 接口契约测试
+node --test demo-server/api.auth.test.js # 接口鉴权测试
 cd admin && npm run build               # 后台类型检查与构建
 ```
 

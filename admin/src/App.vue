@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { api } from "./api";
+import { api, setToken } from "./api";
+import type { Merchant } from "./api";
+import LoginPanel from "./components/LoginPanel.vue";
 import OrdersPanel from "./components/OrdersPanel.vue";
 import ProductsPanel from "./components/ProductsPanel.vue";
 import MembersPanel from "./components/MembersPanel.vue";
@@ -15,8 +17,19 @@ const tabs = [
 
 const active = ref("products");
 const online = ref(false);
+const merchant = ref<Merchant | null>(null);
+const checking = ref(true);
 
 onMounted(async () => {
+  // 先用已保存的令牌验证一次；无效则回到登录页。
+  try {
+    const session = await api.me();
+    merchant.value = session.merchant;
+  } catch {
+    merchant.value = null;
+  } finally {
+    checking.value = false;
+  }
   try {
     await api.health();
     online.value = true;
@@ -24,10 +37,28 @@ onMounted(async () => {
     online.value = false;
   }
 });
+
+function onLoggedIn(value: Merchant) {
+  merchant.value = value;
+}
+
+async function logout() {
+  try {
+    await api.logout();
+  } finally {
+    setToken("");
+    merchant.value = null;
+    active.value = "products";
+  }
+}
 </script>
 
 <template>
-  <div class="admin">
+  <div v-if="checking" class="boot">正在校验登录状态…</div>
+
+  <LoginPanel v-else-if="!merchant" @success="onLoggedIn" />
+
+  <div v-else class="admin">
     <aside class="sidebar">
       <div class="brand">
         <span class="brand-mark">刘</span>
@@ -47,8 +78,12 @@ onMounted(async () => {
         </button>
       </nav>
       <div class="sidebar-foot">
-        <span class="dot" :class="{ on: online }" />
-        {{ online ? "已连接模拟 API" : "未连接模拟 API" }}
+        <div>
+          <span class="dot" :class="{ on: online }" />
+          {{ online ? "已连接模拟 API" : "未连接模拟 API" }}
+        </div>
+        <div class="who">{{ merchant.name }} · {{ merchant.openidBound ? "已绑微信" : "密码登录" }}</div>
+        <button class="logout" @click="logout">退出登录</button>
       </div>
     </aside>
 

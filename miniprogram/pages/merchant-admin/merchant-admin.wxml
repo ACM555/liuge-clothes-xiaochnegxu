@@ -1,0 +1,93 @@
+<view class="page">
+  <view class="demo-banner">演示环境 · 数据为内存假数据，仅商家账号可修改商品与订单</view>
+
+  <view wx:if="{{checking}}" class="empty">正在校验商家身份…</view>
+
+  <block wx:else>
+    <view class="head card">
+      <view>
+        <view class="head-name">{{merchant.name}}</view>
+        <view class="muted">{{merchant.openidBound ? '已绑定微信身份' : '账号密码登录'}} · {{merchant.role}}</view>
+      </view>
+      <button class="btn-ghost logout" bindtap="logout">退出</button>
+    </view>
+
+    <view class="tabs">
+      <view class="tab {{tab === 'orders' ? 'tab-on' : ''}}" data-tab="orders" bindtap="switchTab">订单</view>
+      <view class="tab {{tab === 'products' ? 'tab-on' : ''}}" data-tab="products" bindtap="switchTab">商品</view>
+      <view class="tab {{tab === 'stats' ? 'tab-on' : ''}}" data-tab="stats" bindtap="switchTab">统计</view>
+    </view>
+
+    <view wx:if="{{error}}" class="empty">{{error}}</view>
+    <view wx:elif="{{loading}}" class="empty">正在加载…</view>
+
+    <block wx:else>
+      <!-- 订单 -->
+      <block wx:if="{{tab === 'orders'}}">
+        <view wx:if="{{!orders.length}}" class="empty">暂无订单</view>
+        <view wx:for="{{orders}}" wx:key="id" class="row card">
+          <view class="row-head">
+            <text class="muted">{{item.id}} · {{item.timeText}}</text>
+            <text class="status">{{item.statusText}}</text>
+          </view>
+          <view class="row-body">
+            <image class="thumb" src="{{item.image}}" mode="aspectFill" />
+            <view class="row-info">
+              <view class="row-name">{{item.productName}}</view>
+              <view class="muted">{{item.color}} / {{item.size}} × {{item.quantity}}</view>
+              <view class="muted">{{item.fulfillmentText}} · {{item.contact}}</view>
+              <view wx:if="{{item.address}}" class="muted">{{item.address}}</view>
+            </view>
+            <text class="price">{{item.totalText}}</text>
+          </view>
+          <view class="row-actions">
+            <view
+              wx:for="{{item.actions}}"
+              wx:for-item="action"
+              wx:key="status"
+              class="act {{action.status === 'refunded' ? 'act-danger' : ''}}"
+              data-id="{{item.id}}"
+              data-status="{{action.status}}"
+              bindtap="act"
+            >{{action.label}}</view>
+            <text wx:if="{{!item.actions.length}}" class="muted">已完结</text>
+          </view>
+        </view>
+      </block>
+
+      <!-- 商品 -->
+      <block wx:elif="{{tab === 'products'}}">
+        <view wx:for="{{products}}" wx:key="id" class="row card">
+          <view class="row-body">
+            <image class="thumb" src="{{item.image}}" mode="aspectFill" />
+            <view class="row-info">
+              <view class="row-name">
+                {{item.name}}
+                <text wx:if="{{item.preview}}" class="tag-preview">预告</text>
+              </view>
+              <view class="muted">{{item.category}} · {{item.priceText}}</view>
+              <view class="muted">{{item.stockText}}</view>
+            </view>
+            <text class="status {{item.active ? '' : 'off'}}">{{item.active ? '已上架' : '已下架'}}</text>
+          </view>
+          <view class="row-actions">
+            <view class="act" data-id="{{item.id}}" bindtap="toggleProduct">
+              {{item.active ? '下架' : '上架'}}
+            </view>
+          </view>
+        </view>
+      </block>
+
+      <!-- 统计 -->
+      <block wx:else>
+        <view wx:if="{{stats}}" class="stat-grid">
+          <view class="stat card"><view class="stat-num">{{stats.orders.total}}</view><view class="muted">订单总数</view></view>
+          <view class="stat card"><view class="stat-num">{{money(stats.revenueCents)}}</view><view class="muted">有效营收</view></view>
+          <view class="stat card"><view class="stat-num">{{stats.orders.refunded}}</view><view class="muted">已退款</view></view>
+          <view class="stat card"><view class="stat-num">{{stats.members.total}}</view><view class="muted">会员总数</view></view>
+        </view>
+        <view class="muted foot">分销统计为阶段 3 内容，当前占位为 0。</view>
+      </block>
+    </block>
+  </block>
+</view>

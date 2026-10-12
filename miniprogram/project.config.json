@@ -1,6 +1,6 @@
 {
   "description": "刘哥服装小程序 · 顾客端（第一阶段演示）",
-  "appid": "touristappid",
+  "appid": "wxb32e60aa9b041c47",
   "projectname": "liuge-clothes-miniprogram",
   "miniprogramRoot": "./",
   "compileType": "miniprogram",
@@ -9,7 +9,29 @@
     "es6": true,
     "enhance": false,
     "postcss": true,
-    "minified": false
+    "minified": false,
+    "compileWorklet": false,
+    "uglifyFileName": false,
+    "uploadWithSourceMap": true,
+    "packNpmManually": false,
+    "packNpmRelationList": [],
+    "minifyWXSS": true,
+    "minifyWXML": true,
+    "localPlugins": false,
+    "disableUseStrict": false,
+    "useCompilerPlugins": false,
+    "condition": false,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    }
   },
-  "libVersion": "3.5.0"
+  "libVersion": "3.5.0",
+  "simulatorPluginLibVersion": {},
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "editorSetting": {}
 }

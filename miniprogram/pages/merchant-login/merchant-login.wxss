@@ -1,0 +1,61 @@
+.hero {
+  padding: 40rpx 32rpx;
+  border-radius: 24rpx;
+  background: linear-gradient(135deg, #3a2f26 0%, #6b4a35 70%);
+  color: #fdf6ec;
+}
+
+.hero-title {
+  font-size: 44rpx;
+  font-weight: 700;
+}
+
+.hero .muted {
+  color: #e0cebd;
+  margin-top: 8rpx;
+}
+
+.tabs {
+  display: flex;
+  gap: 12rpx;
+  margin: 28rpx 0 20rpx;
+}
+
+.tab {
+  flex: 1;
+  padding: 16rpx 0;
+  text-align: center;
+  border-radius: 999rpx;
+  background: #fffdf9;
+  color: #6d655b;
+  font-size: 26rpx;
+  border: 1rpx solid #ece2d6;
+}
+
+.tab-on {
+  background: #b4553a;
+  color: #fff8f3;
+  border-color: #b4553a;
+}
+
+.tip {
+  margin-bottom: 16rpx;
+}
+
+.input {
+  margin-bottom: 20rpx;
+  padding: 24rpx;
+  border-radius: 16rpx;
+  background: #fffdf9;
+  border: 1rpx solid #e6dbcd;
+  font-size: 28rpx;
+}
+
+.submit {
+  margin-top: 12rpx;
+}
+
+.foot {
+  margin-top: 28rpx;
+  text-align: center;
+}

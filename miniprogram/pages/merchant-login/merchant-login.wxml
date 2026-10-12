@@ -1,0 +1,29 @@
+<view class="page">
+  <view class="hero">
+    <view class="hero-title">商家登录</view>
+    <view class="muted">演示阶段 · 不与真实微信账号关联</view>
+  </view>
+
+  <view class="tabs">
+    <view class="tab {{mode === 'binding' ? 'tab-on' : ''}}" data-mode="binding" bindtap="setMode">微信绑定码</view>
+    <view class="tab {{mode === 'password' ? 'tab-on' : ''}}" data-mode="password" bindtap="setMode">账号密码</view>
+  </view>
+
+  <block wx:if="{{mode === 'binding'}}">
+    <view class="muted tip">
+      店主设定一次性绑定码，只告知商家本人；绑定后该微信自动识别为商家。
+    </view>
+    <input class="input" placeholder="一次性绑定码" value="{{code}}" bindinput="onCode" />
+  </block>
+
+  <block wx:else>
+    <input class="input" placeholder="商家账号" value="{{username}}" bindinput="onUsername" />
+    <input class="input" password placeholder="登录密码" value="{{password}}" bindinput="onPassword" />
+  </block>
+
+  <button class="btn-primary submit" disabled="{{busy}}" bindtap="submit">
+    {{busy ? '验证中…' : '登录'}}
+  </button>
+
+  <view class="muted foot">顾客无需登录此页即可正常看款下单。</view>
+</view>
