@@ -1,9 +1,11 @@
 const api = require("../../utils/api");
+const { SHOW_MERCHANT_ENTRY } = require("../../config");
 
 Page({
   data: {
     loading: true,
     error: "",
+    showMerchantEntry: SHOW_MERCHANT_ENTRY,
     member: null,
     couponText: "¥0.00",
     commissionText: "¥0.00",

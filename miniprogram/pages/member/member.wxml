@@ -63,8 +63,8 @@
       </view>
     </view>
 
-    <!-- 商家入口：不显眼放在底部，真正的权限由服务端校验 -->
-    <view class="merchant-entry" bindtap="goMerchant">
+    <!-- 商家入口：由 config.SHOW_MERCHANT_ENTRY 控制，确认商家账号后置为 false 即从顾客端移除 -->
+    <view wx:if="{{showMerchantEntry}}" class="merchant-entry" bindtap="goMerchant">
       <text>商家管理入口</text>
       <text class="muted">仅店主使用 ›</text>
     </view>
